@@ -6,6 +6,7 @@ public class ScaleCalculator
 {
     float maxScale = 4f;
     float minScale = 1.2f;
+    float obstacleDamageValue = 0.7f;
 
     public Vector3 CalculatePlayerHeadSize(GateType gateType, int gateValue, Transform headTransform)
     {
@@ -79,6 +80,30 @@ public class ScaleCalculator
 
                 return new Vector3(newXScale, newYScale, newZScale);
         }
+        return new Vector3(newXScale, newYScale, newZScale);
+    }
+
+    public Vector3 DecreasePlayerHeadSize(Transform playerTransform)
+    {
+        float newXScale = playerTransform.localScale.x - obstacleDamageValue;
+        float newYScale = playerTransform.localScale.y - obstacleDamageValue;
+        float newZScale = playerTransform.localScale.z - obstacleDamageValue;
+
+        if (newXScale < minScale)
+        {
+            newXScale = minScale;
+        }
+
+        if (newYScale < minScale)
+        {
+            newYScale = minScale;
+        }
+
+        if (newZScale < minScale)
+        {
+            newZScale = minScale;
+        }
+
         return new Vector3(newXScale, newYScale, newZScale);
     }
 }

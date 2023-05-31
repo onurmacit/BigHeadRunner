@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public GameObject headBoxGO;
     private ScaleCalculator scaleCalculator;
     Renderer headBoxRenderer;
+    private Material currentHeadMat;
+    public Material warningMat;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +20,7 @@ public class PlayerController : MonoBehaviour
         isPlayerMoving = true;
         scaleCalculator = new ScaleCalculator();
         headBoxRenderer = headBoxGO.transform.GetChild(0).gameObject.GetComponent<Renderer>();
+        currentHeadMat = headBoxRenderer.material;
     }
 
     // Update is called once per frame
@@ -68,5 +71,21 @@ public class PlayerController : MonoBehaviour
     public void TouchedToColorBox(Material boxMat)
     {
         headBoxRenderer.material = boxMat;
+        currentHeadMat = boxMat;
+    }
+
+    public void TouchedToObstacle()
+    {
+        headBoxGO.transform.localScale = scaleCalculator.DecreasePlayerHeadSize(headBoxGO.transform);
+        StartCoroutine(StartRedBlinkEffect());
+    }
+
+    private IEnumerator StartRedBlinkEffect()
+    {
+        headBoxGO.transform.GetChild(0).GetComponent<MeshRenderer>().material = warningMat;
+
+        yield return new WaitForSeconds(0.3f);
+
+        headBoxGO.transform.GetChild(0).GetComponent<MeshRenderer>().material = currentHeadMat;
     }
 }
