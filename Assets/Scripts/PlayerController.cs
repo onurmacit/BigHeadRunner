@@ -8,12 +8,16 @@ public class PlayerController : MonoBehaviour
     float xSpeed = 0f;
     float maxXValue = 4.28f;
     bool isPlayerMoving;
+    public GameObject headBoxGO;
+    private ScaleCalculator scaleCalculator;
+    Renderer headBoxRenderer;
 
     // Start is called before the first frame update
     void Start()
     {
         isPlayerMoving = true;
-
+        scaleCalculator = new ScaleCalculator();
+        headBoxRenderer = headBoxGO.transform.GetChild(0).gameObject.GetComponent<Renderer>();
     }
 
     // Update is called once per frame
@@ -53,5 +57,16 @@ public class PlayerController : MonoBehaviour
         {
             isPlayerMoving = false;
         }
+    }
+
+    public void PassedGate(GateType gateType, int gateValue)
+    {
+        headBoxGO.transform.localScale = scaleCalculator.CalculatePlayerHeadSize(gateType, gateValue, headBoxGO.transform);
+        Debug.Log("Kapıdan Geçti");
+    }
+
+    public void TouchedToColorBox(Material boxMat)
+    {
+        headBoxRenderer.material = boxMat;
     }
 }
