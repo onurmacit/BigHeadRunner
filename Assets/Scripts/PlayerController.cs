@@ -13,14 +13,18 @@ public class PlayerController : MonoBehaviour
     Renderer headBoxRenderer;
     private Material currentHeadMat;
     public Material warningMat;
+    Animator playerAnim;
+    public AudioSource playerAudioSource;
+    public AudioClip gateClip, colorBoxClip, obstacleClip, sucessClip;
 
     // Start is called before the first frame update
     void Start()
     {
-        isPlayerMoving = true;
+
         scaleCalculator = new ScaleCalculator();
         headBoxRenderer = headBoxGO.transform.GetChild(0).gameObject.GetComponent<Renderer>();
         currentHeadMat = headBoxRenderer.material;
+        playerAnim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -59,23 +63,30 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "FinishLine")
         {
             isPlayerMoving = false;
+            StartIdleAnim();
+            GameManager.instance.ShowSucessPanel();
+            StopBackgroundMusic();
+            PlayAudio(sucessClip, 1f);
         }
     }
 
     public void PassedGate(GateType gateType, int gateValue)
     {
+        PlayAudio(gateClip, 1f);
         headBoxGO.transform.localScale = scaleCalculator.CalculatePlayerHeadSize(gateType, gateValue, headBoxGO.transform);
         Debug.Log("Kapıdan Geçti");
     }
 
     public void TouchedToColorBox(Material boxMat)
     {
+        PlayAudio(colorBoxClip, 1f);
         headBoxRenderer.material = boxMat;
         currentHeadMat = boxMat;
     }
 
     public void TouchedToObstacle()
     {
+        PlayAudio(obstacleClip, 1f);
         headBoxGO.transform.localScale = scaleCalculator.DecreasePlayerHeadSize(headBoxGO.transform);
         StartCoroutine(StartRedBlinkEffect());
     }
@@ -87,5 +98,33 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         headBoxGO.transform.GetChild(0).GetComponent<MeshRenderer>().material = currentHeadMat;
+    }
+
+    public void GameStarted()
+    {
+        isPlayerMoving = true;
+        StartRunAnim();
+    }
+
+    private void StartRunAnim()
+    {
+        playerAnim.SetBool("isIdleOn", false);
+        playerAnim.SetBool("isRunningOn", true);
+    }
+
+    private void StartIdleAnim()
+    {
+        playerAnim.SetBool("isIdleOn", true);
+        playerAnim.SetBool("isRunningOn", false);
+    }
+
+    private void PlayAudio(AudioClip audioClip, float volume)
+    {
+        playerAudioSource.PlayOneShot(audioClip, volume);
+    }
+
+    private void StopBackgroundMusic()
+    {
+        Camera.main.GetComponent<AudioSource>().Stop();
     }
 }
