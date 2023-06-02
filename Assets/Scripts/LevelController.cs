@@ -8,22 +8,28 @@ public class LevelController : MonoBehaviour
     public static LevelController instance;
     private int currentLevel;
     private int maxLevel;
-    // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
+
         maxLevel = 2;
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(this.gameObject);
         GetLevel();
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void GetLevel()
@@ -41,7 +47,6 @@ public class LevelController : MonoBehaviour
     public void NextLevel()
     {
         currentLevel++;
-
         if (currentLevel > maxLevel)
         {
             currentLevel = 1;

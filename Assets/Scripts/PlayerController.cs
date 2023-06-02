@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
         {
             isPlayerMoving = false;
             StartIdleAnim();
-            GameManager.instance.ShowSucessPanel();
+            GameManager.instance.ShowSucessMenu();
             StopBackgroundMusic();
             PlayAudio(sucessClip, 1f);
         }
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
     {
         PlayAudio(gateClip, 1f);
         headBoxGO.transform.localScale = scaleCalculator.CalculatePlayerHeadSize(gateType, gateValue, headBoxGO.transform);
-        Debug.Log("Kapıdan Geçti");
+        
     }
 
     public void TouchedToColorBox(Material boxMat)
