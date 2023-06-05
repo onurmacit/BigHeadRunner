@@ -1,0 +1,51 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class GameManager : MonoBehaviour
+{
+    public static event Action GameStartedEvent;
+    public static event Action NextLevelButtonTappedEvent;
+    public static event Action ShowSuccessMenuEvent;
+
+    public GameObject StartMenuPanel;
+    public GameObject SuccessPanel;
+
+    private void Start()
+    {
+       
+        StartMenuPanel.SetActive(true);
+    }
+
+    public void StartButtonTapped()
+    {
+        StartMenuPanel.SetActive(false);
+
+        if (GameStartedEvent != null)
+        {
+            GameStartedEvent.Invoke();
+        }
+    }
+
+    public void NextLevelButtonTapped()
+    {
+        SuccessPanel.SetActive(false);
+
+        if (NextLevelButtonTappedEvent != null)
+        {
+            NextLevelButtonTappedEvent.Invoke();
+        }
+    }
+
+    public void ShowSuccessMenu()
+    {
+        SuccessPanel.SetActive(true);
+
+        if (ShowSuccessMenuEvent != null)
+        {
+            ShowSuccessMenuEvent.Invoke();
+        }
+    }
+}
