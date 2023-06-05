@@ -1,0 +1,54 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class GameManager : MonoBehaviour
+{
+    private static GameManager instance;
+
+    public GameObject StartMenuPanel;
+    public GameObject SuccessPanel;
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogError("GameManager instance already exists!");
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
+    private void Start()
+    {
+        
+    }
+
+    private void Update()
+    {
+        
+    }
+
+    public void StartButtonTapped()
+    {
+        StartMenuPanel.gameObject.SetActive(false);
+        GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
+        PlayerController playerScript = playerGO.GetComponent<PlayerController>();
+        playerScript.GameStarted();
+    }
+
+    public void NextLevelButtonTapped()
+    {
+        SuccessPanel.gameObject.SetActive(false);
+        LevelController.Instance.NextLevel();
+    }
+
+    public void ShowSuccessMenu()
+    {
+        SuccessPanel.gameObject.SetActive(true);
+    }
+}
