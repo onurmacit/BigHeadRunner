@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,51 +6,38 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public static event Action GameStartedEvent;
+    public static event Action NextLevelButtonTappedEvent;
+    public static event Action ShowSuccessMenuEvent;
+
     public GameObject StartMenuPanel;
-    public GameObject SucessPanel;
-    public void Awake()
-    {
-        if (instance != null && instance != this)
-        {
-            Destroy(this);
-        }
+    public GameObject SuccessPanel;
 
-        else
-        {
-            instance = this;
-        }
-    }
+    private PlayerController playerController;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        StartMenuPanel.SetActive(true);
+        playerController = GameObject.FindGameObjectWithTag("Player")?.GetComponent<PlayerController>();
     }
 
     public void StartButtonTapped()
     {
-        StartMenuPanel.gameObject.SetActive(false);
-        GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
-        PlayerController playerScript = playerGO.GetComponent<PlayerController>();
-        playerScript.GameStarted();
+        StartMenuPanel.SetActive(false);
+
+        playerController?.GameStarted();
+        GameStartedEvent?.Invoke();
     }
 
     public void NextLevelButtonTapped()
     {
-        SucessPanel.gameObject.SetActive(false);
-        LevelController.instance.NextLevel();
+        SuccessPanel.SetActive(false);
+        NextLevelButtonTappedEvent?.Invoke();
     }
 
-    public void ShowSucessMenu()
+    public void ShowSuccessMenu()
     {
-        SucessPanel.gameObject.SetActive(true);
+        SuccessPanel.SetActive(true);
+        ShowSuccessMenuEvent?.Invoke();
     }
-
 }

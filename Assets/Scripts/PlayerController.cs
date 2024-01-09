@@ -4,28 +4,26 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    float playerSpeed = 6f;
-    float xSpeed = 0f;
-    float maxXValue = 4.28f;
-    bool isPlayerMoving;
-    public GameObject headBoxGO;
-    private ScaleCalculator scaleCalculator;
-    Renderer headBoxRenderer;
-    private Material currentHeadMat;
-    public Material warningMat;
-    Animator playerAnim;
-    public AudioSource playerAudioSource;
-    public AudioClip gateClip, colorBoxClip, obstacleClip, sucessClip;
+[SerializeField] private float playerSpeed = 6f;   
+[SerializeField] private float maxXValue = 4.28f;
+[SerializeField] private GameObject headBoxGO;
+[SerializeField] private Material warningMat;
+[SerializeField] private Animator playerAnim;
+[SerializeField] private AudioSource playerAudioSource;
+[SerializeField] private AudioClip gateClip, colorBoxClip, obstacleClip, successClip;
+float xSpeed = 0f;
+bool isPlayerMoving;
+private ScaleCalculator scaleCalculator;
+Renderer headBoxRenderer;
+private Material currentHeadMat;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+   private void Awake()
+{
+    scaleCalculator = new ScaleCalculator();
+    headBoxRenderer = headBoxGO.transform.GetChild(0).GetComponent<Renderer>();
+    currentHeadMat = headBoxRenderer.material;
+}
 
-        scaleCalculator = new ScaleCalculator();
-        headBoxRenderer = headBoxGO.transform.GetChild(0).gameObject.GetComponent<Renderer>();
-        currentHeadMat = headBoxRenderer.material;
-        playerAnim = GetComponent<Animator>();
-    }
 
     // Update is called once per frame
     void Update()
@@ -64,9 +62,9 @@ public class PlayerController : MonoBehaviour
         {
             isPlayerMoving = false;
             StartIdleAnim();
-            GameManager.instance.ShowSucessMenu();
+            // GameManager.instance.ShowSucessMenu();
             StopBackgroundMusic();
-            PlayAudio(sucessClip, 1f);
+            PlayAudio(successClip, 1f);
         }
     }
 
